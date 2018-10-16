@@ -2,6 +2,8 @@ package com.vojtechruzicka.springfoxexample.controllers;
 
 import com.vojtechruzicka.springfoxexample.domain.Person;
 import com.vojtechruzicka.springfoxexample.services.PersonService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,22 +16,29 @@ public class PersonController {
     private PersonService personService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public List<Person> getAllPersons() {
+    @ApiOperation("Returns list of all Persons in the system.")
+    public List getAllPersons() {
         return personService.getAllPersons();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}", produces = "application/json")
-    public Person getPersonById(@PathVariable int id) {
+    @ApiOperation("Returns a specific person by their identifier. 404 if does not exist.")
+    public Person getPersonById(@ApiParam("Id of the person to be obtained. Cannot be empty.")
+                                @PathVariable int id) {
         return personService.getPersonById(id);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    public void deletePerson(@PathVariable int id) {
+    @ApiOperation("Deletes a person from the system. 404 if the person's identifier is not found.")
+    public void deletePerson(@ApiParam("Id of the person to be deleted. Cannot be empty.")
+                             @PathVariable int id) {
         personService.deletePerson(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public Person createPerson(@RequestBody Person person) {
+    @ApiOperation("Creates a new person.")
+    public Person createPerson(@ApiParam("Person information for a new person to be created.")
+                               @RequestBody Person person) {
         return personService.createPerson(person);
     }
 
